@@ -3,7 +3,7 @@
 #include <pthread.h>
 #include <sys/time.h>
 
-#define NUMTHREADS 2
+
 
 typedef struct inf {
    int  *array1;
@@ -30,6 +30,9 @@ int main (int argc, char *argv[]){
 	//Abriendo archivos
 	FILE *f1 = fopen(argv[1], "r");
 	FILE *f2 = fopen(argv[2], "r");
+
+	// Hilos
+	int numThreads = argv[3];
 
 	if(f1 == NULL || f2 == NULL){
 		printf("Error al abrir archivos\n");
@@ -60,7 +63,7 @@ int main (int argc, char *argv[]){
 	fillArray(f2, len2, array2);
 
 	//Multiplicación 
-	pthread_t tid[NUMTHREADS];
+	pthread_t tid[numThreads];
 
 	//Midiendo tiempo
 	struct timeval begin, end;
@@ -71,7 +74,7 @@ int main (int argc, char *argv[]){
    printf("\n mutex init failed\n");
    return 1;
   }
-  for(int j=0; j<NUMTHREADS; j++){
+  for(int j=0; j<numThreads; j++){
   	info i;
 
   	i.size = len1;
@@ -80,11 +83,13 @@ int main (int argc, char *argv[]){
 
     pthread_create(&tid[j], NULL, dotProd, (void *)&i);
   }
-  for( int j=0; j< NUMTHREADS; j++){
+  for( int j=0; j< numThreads; j++){
      pthread_join(tid[j], NULL);
   }
   /* mutex destroy*/
   pthread_mutex_destroy(&lock);
+
+	result = result/numThreads;
 
 
 	gettimeofday(&end, NULL);
