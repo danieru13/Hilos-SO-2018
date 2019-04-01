@@ -22,7 +22,7 @@ void* dotProd(void* args);
 
 int main (int argc, char *argv[]){
 
-	if(argc != 3){
+	if(argc != 4){
 		printf("Recuerde que debe ingresar los nombres de los 2 archivos separados por un espacio y el número de hilos\n");
 		exit(1);
 	}
@@ -32,7 +32,7 @@ int main (int argc, char *argv[]){
 	FILE *f2 = fopen(argv[2], "r");
 
 	// Hilos
-	int numThreads = argv[3];
+	int numThreads = atoi(argv[3]);
 
 	if(f1 == NULL || f2 == NULL){
 		printf("Error al abrir archivos\n");
